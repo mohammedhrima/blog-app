@@ -1,4 +1,4 @@
-# Flask Project Overview
+# Project Overview
 This project is a Flask-based web application that serves as both the backend and the file server. It includes basic authentication pages (signup and login) and a home page with a section for displaying news articles fetched from the backend.
 
 ### Project Structure
