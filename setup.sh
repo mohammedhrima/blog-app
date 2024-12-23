@@ -19,6 +19,8 @@ venv/
 .DS_Store
 *.log
 *.sqlite3
+*.db
+
 EOF
   fi
 
@@ -37,8 +39,11 @@ freeze() {
 }
 
 clean() {
-  rm -rf __pycache__
-  rm -rf venv
+  rm -rf __pycache__ venv *.db
+}
+
+out() {
+  deactivate
 }
 
 install() {

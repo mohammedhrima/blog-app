@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='home.css') }}"
+    />
+    <script>
+      function displayNews(articles) {
+        const newsContainer = document.getElementById("news-container");
+        newsContainer.innerHTML = articles
+          .map(
+            (article) => `
+        <div class="news-article">
+          <h3>${article.title}</h3>
+          <p>${article.content}</p>
+          <p><small>By ${article.author} on ${article.date}</small></p>
+        </div>
+      `
+          )
+          .join("");
+      }
+
+      async function fetchNews() {
+        try {
+          const response = await fetch("/news");
+          if (response.ok) {
+            const articles = await response.json();
+            displayNews(articles);
+          } else {
+            console.error("Failed to fetch news.");
+          }
+        } catch (error) {
+          console.error("Error fetching news:", error);
+        }
+      }
+
+      window.onload = function () {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+          window.location.href = "/login";
+        } else {
+          document.getElementById("username").textContent =
+            user.username || "User";
+          fetchNews();
+        }
+      };
+
+      function handleLogout() {
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Welcome to the Home Page</h1>
+      <p>Hello, <span id="username"></span>! Welcome to your dashboard.</p>
+      <button onclick="handleLogout()" class="btn">Logout</button>
+
+      <section id="news-section">
+        <h2>Latest News</h2>
+        <div id="news-container">
+          <!-- News articles will be dynamically inserted here -->
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
